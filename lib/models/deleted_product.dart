@@ -1,41 +1,11 @@
 import 'dart:convert';
 
-ProductModel productModelFromJson(String str) => ProductModel.fromJson(json.decode(str));
+DeletedProduct deletedProductFromJson(String str) => DeletedProduct.fromJson(json.decode(str));
 
-String productModelToJson(ProductModel data) => json.encode(data.toJson());
+String deletedProductToJson(DeletedProduct data) => json.encode(data.toJson());
 
-class ProductModel {
-  final List<Product> products;
-  final int total;
-  final int skip;
-  final int limit;
-
-  ProductModel({
-    required this.products,
-    required this.total,
-    required this.skip,
-    required this.limit,
-  });
-
-  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-    products: List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
-    total: json["total"],
-    skip: json["skip"],
-    limit: json["limit"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "products": List<dynamic>.from(products.map((x) => x.toJson())),
-    "total": total,
-    "skip": skip,
-    "limit": limit,
-  };
-}
-
-List<Product> productFromJson(String str) => List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
-
-class Product {
-  final String id;
+class DeletedProduct {
+  final int id;
   final String title;
   final String description;
   final int price;
@@ -46,8 +16,10 @@ class Product {
   final String category;
   final String thumbnail;
   final List<String> images;
+  final bool isDeleted;
+  final DateTime deletedOn;
 
-  Product({
+  DeletedProduct({
     required this.id,
     required this.title,
     required this.description,
@@ -59,9 +31,11 @@ class Product {
     required this.category,
     required this.thumbnail,
     required this.images,
+    required this.isDeleted,
+    required this.deletedOn,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
+  factory DeletedProduct.fromJson(Map<String, dynamic> json) => DeletedProduct(
     id: json["id"],
     title: json["title"],
     description: json["description"],
@@ -73,6 +47,8 @@ class Product {
     category: json["category"],
     thumbnail: json["thumbnail"],
     images: List<String>.from(json["images"].map((x) => x)),
+    isDeleted: json["isDeleted"],
+    deletedOn: DateTime.parse(json["deletedOn"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -87,5 +63,7 @@ class Product {
     "category": category,
     "thumbnail": thumbnail,
     "images": List<dynamic>.from(images.map((x) => x)),
+    "isDeleted": isDeleted,
+    "deletedOn": deletedOn.toIso8601String(),
   };
 }

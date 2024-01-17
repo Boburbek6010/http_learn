@@ -4,10 +4,15 @@ import 'package:http/http.dart';
 class NetworkService {
 
   // baseUrl
-  static const BASEURL = 'dummyjson.com';
+  // static const BASEURL = 'dummyjson.com';
+  static const BASEURL = '6554a27063cafc694fe6bbeb.mockapi.io';
 
   // APIS
-  static String apiGetAllProducts = '/products';
+  // static String apiGetAllProducts = '/products';
+  // static String apiDeleteProduct = '/products/';
+  static String apiGetAllProducts = '/art';
+  static String apiDeleteProduct = '/art/';
+  static String apiUpdateProduct = '/art/';
 
   // headers
   static Map<String, String>? headers = {
@@ -34,8 +39,8 @@ class NetworkService {
     return response.reasonPhrase;
   }
 
-  static Future<String?> PUT(String api, Map<String, String> params, Map<String, dynamic> body) async {
-    final url = Uri.https(BASEURL, api, params);
+  static Future<String?> PUT(String api, Map<String, dynamic> body, String id) async {
+    final url = Uri.https(BASEURL, "$api$id");
     final response = await put(url, body: jsonEncode(body), headers: headers);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.body;
@@ -44,17 +49,14 @@ class NetworkService {
   }
 
 
-  static Future<String?> DELETE(String api, Map<String, String> params) async {
-    final url = Uri.https(BASEURL, api, params);
+  static Future<String?> DELETE(String api, int id) async {
+    final url = Uri.https(BASEURL, "$api${id.toString()}");
     final response = await delete(url, headers: headers);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.body;
     }
     return null;
   }
-
-
-
 
   /// params
   static Map<String, String> emptyParams() => <String, String>{};
